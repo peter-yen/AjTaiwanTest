@@ -15,8 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func setupRootVC() {
         window = UIWindow()
         window?.makeKeyAndVisible()
-        let VC = ViewController()
-        window?.rootViewController = VC
+        let tabBarVC = TabBarViewController()
+        window?.rootViewController = tabBarVC
     }
     
 //    private func configure() {
