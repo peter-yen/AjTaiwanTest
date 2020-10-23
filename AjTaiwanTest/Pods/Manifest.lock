@@ -1,24 +1,30 @@
 PODS:
   - PowerMode (0.9.4)
+  - SDWebImage (5.9.1):
+    - SDWebImage/Core (= 5.9.1)
+  - SDWebImage/Core (5.9.1)
   - SnapKit (5.0.1)
   - Toast-Swift (5.0.1)
 
 DEPENDENCIES:
   - PowerMode
+  - SDWebImage
   - SnapKit
   - Toast-Swift
 
 SPEC REPOS:
   trunk:
     - PowerMode
+    - SDWebImage
     - SnapKit
     - Toast-Swift
 
 SPEC CHECKSUMS:
   PowerMode: 945a6adce9a1156c314fca11d3170d4620af88b5
+  SDWebImage: a990c053fff71e388a10f3357edb0be17929c9c5
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
 
-PODFILE CHECKSUM: 9563fe8bffbba5947559663c6368f87a59e01cad
+PODFILE CHECKSUM: 1ec1a9295b709d4c58c2992f3eba838ad4c61235
 
 COCOAPODS: 1.9.3

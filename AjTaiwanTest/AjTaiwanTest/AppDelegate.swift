@@ -7,7 +7,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-//        self.configure()
         self.setupRootVC()
         return true
     }
@@ -18,9 +17,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tabBarVC = TabBarViewController()
         window?.rootViewController = tabBarVC
     }
-    
-//    private func configure() {
-//        PowerMode.sparkColors = [.red, .blue, .yellow, .cyan]
-//    }
 }
 

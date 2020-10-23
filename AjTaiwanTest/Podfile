@@ -10,5 +10,6 @@ target 'AjTaiwanTest' do
   pod 'SnapKit'
   pod 'PowerMode'
   pod 'Toast-Swift'
-
+  pod 'Toast-Swift'
+  pod 'SDWebImage'
 end

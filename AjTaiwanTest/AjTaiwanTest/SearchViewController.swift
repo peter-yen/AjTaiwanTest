@@ -7,21 +7,43 @@
 
 import UIKit
 import SnapKit
+import Toast_Swift
 
 class SearchViewController: UIViewController {
     
-    lazy var textSearchBar: UISearchBar = {
-        let s = UISearchBar()
-        s.searchTextField.placeholder = "請輸入文字"
+    lazy var textSearchTextField: UISearchTextField = {
+        let s = UISearchTextField()
+        s.placeholder = "請輸入文字"
+        s.addTarget(self, action: #selector(SearchTextFieldEditingChanged), for: .editingChanged)
         return s
     }()
-    lazy var pageSearchBar: UISearchBar = {
-        let s = UISearchBar()
-        s.searchTextField.placeholder = "請輸入頁數"
+    lazy var pageSearchTextField: UISearchTextField = {
+        let s = UISearchTextField()
+        s.addTarget(self, action: #selector(SearchTextFieldEditingChanged), for: .editingChanged)
+        s.placeholder = "請輸入數量"
+        s.keyboardType = .numberPad
         return s
     }()
+    @objc func SearchTextFieldEditingChanged() {
+        
+        if let text = textSearchTextField.text,
+           let pageText = pageSearchTextField.text {
+            
+            if text.isEmpty || pageText.isEmpty == true {
+            self.finishButton.isEnabled = false
+            self.finishButton.alpha = 0.3
+                return
+            } else {
+                self.finishButton.isEnabled = true
+                self.finishButton.alpha = 1
+            }
+        }
+    }
+    
     lazy var finishButton: UIButton = {
         let t = UIButton()
+        t.alpha = 0.3
+        t.isEnabled = false
         t.clipsToBounds = true
         t.layer.cornerRadius = 15
         t.backgroundColor = .systemBlue
@@ -29,11 +51,13 @@ class SearchViewController: UIViewController {
         t.addTarget(self, action: #selector(finishButtonDidTap), for: .touchUpInside)
         return t
     }()
-    
     @objc func finishButtonDidTap() {
-        let photoVC = PhotoViewController()
-        navigationController?.pushViewController(photoVC, animated: true)
+        if let text = pageSearchTextField.text {
+            let photoVC = PhotoViewController(pageNumber: Int(text)!)
+            navigationController?.pushViewController(photoVC, animated: true)
+        }
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,23 +68,23 @@ class SearchViewController: UIViewController {
     }
     
     func setupSubviews() {
-        self.view.addSubview(self.textSearchBar.searchTextField)
-        self.textSearchBar.searchTextField.snp.makeConstraints { (m) in
+        self.view.addSubview(self.textSearchTextField)
+        self.textSearchTextField.snp.makeConstraints { (m) in
             m.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(15)
             m.width.equalTo(300)
             m.height.equalTo(35)
             m.centerX.equalToSuperview()
         }
-        self.view.addSubview(self.pageSearchBar.searchTextField)
-        self.pageSearchBar.searchTextField.snp.makeConstraints { (m) in
-            m.top.equalTo(self.textSearchBar.searchTextField.snp.bottom).offset(15)
+        self.view.addSubview(self.pageSearchTextField)
+        self.pageSearchTextField.snp.makeConstraints { (m) in
+            m.top.equalTo(self.textSearchTextField.snp.bottom).offset(15)
             m.width.equalTo(300)
             m.height.equalTo(35)
             m.centerX.equalToSuperview()
         }
         self.view.addSubview(self.finishButton)
         self.finishButton.snp.makeConstraints { (m) in
-            m.top.equalTo(self.pageSearchBar.searchTextField.snp.bottom).offset(15)
+            m.top.equalTo(self.pageSearchTextField.snp.bottom).offset(15)
             m.width.equalTo(300)
             m.height.equalTo(35)
             m.centerX.equalToSuperview()

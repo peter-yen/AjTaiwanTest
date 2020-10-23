@@ -6,8 +6,18 @@
 //
 
 import UIKit
+import SDWebImage
 
 class PhotoCollectionViewCell: UICollectionViewCell {
+    
+    var photoData: Photo! {
+        didSet {
+            self.eattablesLabel.text = photoData.title
+            let url = photoData.imageURL
+            self.foodImageView.sd_setImage(with: url) { (_, _, _, _) in
+            }
+        }
+    }
     
     lazy var eattablesLabel: UILabel = {
        let l = UILabel()
@@ -36,9 +46,7 @@ class PhotoCollectionViewCell: UICollectionViewCell {
             m.top.equalTo(self.foodImageView.snp.bottom)
             m.centerX.equalToSuperview()
         }
-        
     }
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

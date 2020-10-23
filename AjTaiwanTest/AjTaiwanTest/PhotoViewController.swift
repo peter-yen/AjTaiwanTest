@@ -3,14 +3,45 @@ import SnapKit
 
 class PhotoViewController: UIViewController {
     
+    var pageNumber: Int = 0
+    convenience init(pageNumber: Int) {
+        self.init()
+        self.pageNumber = pageNumber
+    }
+    
+    var photos: [Photo] = []
     var collectionView: UICollectionView!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setupCollectionView()
         self.view.backgroundColor = .white
-
+        
+        if let url = URL(string: "https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=f2d1f4ed70ad0b36ea7fdf8823408ada&text=%E7%BE%8E%E9%A3%9F&format=json&nojsoncallback=1&auth_token=72157716581183752-40c4d846f0076322&api_sig=f2402f3ed67b43b04dd5f80953065545") {
+            URLSession.shared.dataTask(with: url) { [self] (data, response, err) in
+                if let err = err {
+                    self.view.showToast(text: err.localizedDescription)
+                    return
+                }
+                if let data = data {
+                    guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String:Any] else { return }
+                    if let photosData = json["photos"] as? [String: Any],
+                       let photosArray = photosData["photo"] as? [[String: Any]] {
+                        
+                        for dict in photosArray[0...self.pageNumber - 1] {
+                            let photo = Photo(dictionary: dict)
+                            self.photos.append(photo)
+                            print(self.pageNumber)
+                            DispatchQueue.main.async {
+                                self.collectionView.reloadData()
+                            }
+                        }
+                    }
+                }
+            }.resume()
+        }
+        
     }
     
     func setupCollectionView() {
@@ -29,18 +60,20 @@ class PhotoViewController: UIViewController {
             m.edges.equalTo(self.view.safeAreaLayoutGuide.snp.edges)
         }
     }
-
+    
 }
 
 extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        6
+        return self.photos.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCollectionViewCell", for: indexPath) as! PhotoCollectionViewCell
+        let photo = photos[indexPath.item]
+        cell.photoData = photo
         
         return cell
     }
